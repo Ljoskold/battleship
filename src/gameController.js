@@ -15,6 +15,10 @@ export const gameController = (() => {
 		}
 	}
 
+	function getGrid() {
+		return grid;
+	}
+
 	function placeShip(ship, row, col, orientation) {
 		if (orientation === 'horizontal') {
 			for (let i = 0; i < ship.length; i++) {
@@ -28,30 +32,34 @@ export const gameController = (() => {
 		ships.push(ship);
 	}
 
-	function receiveAttack(row, col) {
+	function makeAttack(row, col) {
 		if (grid[row][col].hit === false) {
 			grid[row][col].hit = true;
-			switch (grid[row][col].ship) {
-				case 'carrier':
-					carrier.hit();
-					break;
-				case 'battleship':
-					battleship.hit();
-					break;
-				case 'cruiser':
-					cruiser.hit();
-					break;
-				case 'submarine':
-					submarine.hit();
-					break;
-				case 'destroyer':
-					destroyer.hit();
-					break;
-			}
-			checkWin();
+			checkAttack(row, col);
 		} else {
-			console.log('cant shoot same place twice');
+			throw new Error();
 		}
+	}
+
+	function checkAttack(row, col) {
+		switch (grid[row][col].ship) {
+			case 'carrier':
+				carrier.hit();
+				break;
+			case 'battleship':
+				battleship.hit();
+				break;
+			case 'cruiser':
+				cruiser.hit();
+				break;
+			case 'submarine':
+				submarine.hit();
+				break;
+			case 'destroyer':
+				destroyer.hit();
+				break;
+		}
+		checkWin();
 	}
 
 	function checkWin() {
@@ -60,11 +68,23 @@ export const gameController = (() => {
 		}
 		return allShipsDown;
 	}
+
 	const carrier = ship.createCarrier();
 	const battleship = ship.createBattleship();
 	const cruiser = ship.createCruiser();
 	const submarine = ship.createSubmarine();
 	const destroyer = ship.createDestroyer();
 
-	createGrid();
+	// createGrid();
+	// placeShip(carrier, 0, 0, 'horizontal');
+	// makeAttack(0, 0);
+
+	return {
+		createGrid,
+		placeShip,
+		makeAttack,
+		checkAttack,
+		checkWin,
+		getGrid,
+	};
 })();
