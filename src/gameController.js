@@ -41,6 +41,13 @@ export const gameController = (() => {
 		}
 	}
 
+	function makeRandomAttack() {
+		const row = Math.floor(Math.random() * gridSize);
+		const col = Math.floor(Math.random() * gridSize);
+
+		return { row, col };
+	}
+
 	function checkAttack(row, col) {
 		switch (grid[row][col].ship) {
 			case 'carrier':
@@ -74,10 +81,11 @@ export const gameController = (() => {
 	const cruiser = ship.createCruiser();
 	const submarine = ship.createSubmarine();
 	const destroyer = ship.createDestroyer();
-
-	// createGrid();
-	// placeShip(carrier, 0, 0, 'horizontal');
-	// makeAttack(0, 0);
+	const randomAttack = makeRandomAttack();
+	createGrid();
+	console.log(randomAttack);
+	console.log(makeAttack(randomAttack.row, randomAttack.col));
+	console.log(grid);
 
 	return {
 		createGrid,
