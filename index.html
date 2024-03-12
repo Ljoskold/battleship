@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Battleships</title>
+	<script defer src="bundle.js"></script></head>
+	<body>
+		<div class="main-container">
+			<div class="header">
+				<span id="header-logo">Battleships</span>
+
+				<button type="button" id="comp-attack-button">
+					Comp attack
+				</button>
+			</div>
+			<div class="initiator">
+				<!-- <input
+					type="text"
+					name="player-name"
+					id="player-name"
+					placeholder="Enter your name"
+					autocomplete="off"
+				/> -->
+				<button type="button" id="get-name-button">PLAY</button>
+			</div>
+			<div class="game-handler">
+				<div class="ships-container">
+					<div class="configuration">
+						<button type="button" id="random-ships-button">
+							Randomize
+						</button>
+						<button id="reset-button">reset</button>
+						<label for="orientation">Place:</label>
+						<button
+							class="orientation-buttons chosen"
+							id="horizontal"
+							value="horizontal"
+						>
+							&mdash;
+						</button>
+						<button
+							class="orientation-buttons"
+							id="vertical"
+							value="vertical"
+						>
+							|
+						</button>
+					</div>
+					<div draggable="true" class="ship-carrier draggable">
+						carrier
+					</div>
+					<div draggable="true" class="ship-battleship draggable">
+						battleship
+					</div>
+					<div draggable="true" class="ship-cruiser draggable">
+						cruiser
+					</div>
+					<div draggable="true" class="ship-submarine draggable">
+						submarine
+					</div>
+					<div draggable="true" class="ship-destroyer draggable">
+						destroyer
+					</div>
+				</div>
+				<div class="player-grid-container">
+					<div class="player-grid">
+						<p>123</p>
+					</div>
+				</div>
+				<div class="computer-grid-container">
+					<div class="computer-grid">
+						<p>321</p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
