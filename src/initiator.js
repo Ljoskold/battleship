@@ -1,7 +1,12 @@
-import css from './styles.css';
+import './styles.css';
+import './gameHandler.css';
+
 import './displayController';
 import './gameController';
-import './shipsObjects';
-import { Player, player1 } from './player';
+import './shipsController';
+import { displayController } from './displayController';
+import { gameController } from './gameController';
 
-console.log(player1.name);
+gameController.initiateGameWithRandomShips();
+displayController.initiateRenderGrid();
+// gameController.game();

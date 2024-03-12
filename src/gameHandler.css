@@ -1,0 +1,70 @@
+.game-handler {
+	display: none;
+	width: 100%;
+	height: 100%;
+	justify-content: space-evenly;
+	align-items: center;
+}
+.ships-container,
+.player-grid-container,
+.computer-grid-container {
+	width: 450px;
+	height: 80%;
+}
+.ships-container {
+	display: grid;
+	grid-template-rows: repeat(6, 1fr);
+	border: 1px solid blue;
+	align-items: center;
+	justify-items: center;
+	width: 250px;
+	height: 350px;
+}
+/* .ships-container div {
+	text-align: center;
+	border: 1px solid darkblue;
+	margin: 10px;
+} */
+.player-grid-container,
+.computer-grid-container {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.player-grid,
+.computer-grid {
+	width: 420px;
+	height: 420px;
+	border: 1px solid black;
+	display: grid;
+	grid-template-columns: repeat(10, 1fr);
+	grid-template-rows: repeat(10, 1fr);
+}
+.cell {
+	border: 0.5px solid black;
+	/* width: calc(100% / 10);
+	height: calc(100% / 10); */
+	background-color: aliceblue;
+	font-size: 1.5rem;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.cell.carrier {
+	background-color: yellow;
+}
+.cell.battleship {
+	background-color: rgb(255, 128, 0);
+}
+.cell.cruiser {
+	background-color: rgb(166, 255, 0);
+}
+.cell.submarine {
+	background-color: rgb(0, 255, 128);
+}
+.cell.destroyer {
+	background-color: rgb(0, 251, 255);
+}
+.selected-ship {
+	background-color: lightgrey;
+}

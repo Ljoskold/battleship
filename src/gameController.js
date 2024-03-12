@@ -1,12 +1,22 @@
-import { ship, Ship } from './shipsObjects.js';
+import {
+	displayController,
+	playerGridDiv,
+	computerGridDiv,
+} from './displayController.js';
+import {
+	shipsController,
+	computerShips,
+	playerShips,
+} from './shipsController.js';
+
+export let playerGrid = [];
+export let computerGrid = [];
 
 export const gameController = (() => {
 	const gridSize = 10;
-	const grid = [];
-	let allShipsDown = false;
-	const ships = [];
 
-	function createGrid() {
+	function createGrid(grid) {
+		// grid = [];
 		for (let i = 0; i < gridSize; i++) {
 			grid[i] = [];
 			for (let j = 0; j < gridSize; j++) {
@@ -14,85 +24,91 @@ export const gameController = (() => {
 			}
 		}
 	}
-
-	function getGrid() {
-		return grid;
+	function clearGrid(grid) {
+		grid = [];
 	}
 
-	function placeShip(ship, row, col, orientation) {
-		if (orientation === 'horizontal') {
-			for (let i = 0; i < ship.length; i++) {
-				grid[row][col + i].ship = ship.name;
-			}
-		} else {
-			for (let i = 0; i < ship.length; i++) {
-				grid[row + i][col].ship = ship.name;
-			}
-		}
-		ships.push(ship);
-	}
-
-	function makeAttack(row, col) {
+	function makeAttack(row, col, grid) {
+		console.log('Computer ships');
+		console.log(computerShips);
 		if (grid[row][col].hit === false) {
 			grid[row][col].hit = true;
-			checkAttack(row, col);
+			checkAttack(row, col, computerGrid, computerShips);
+			checkWin();
 		} else {
 			throw new Error();
 		}
 	}
 
-	function makeRandomAttack() {
+	function makeComputerAttack() {
+		console.log('Player ships');
+		console.log(playerShips);
+		const randomCoordinates = getRandomCoordinates();
+		const { row, col } = randomCoordinates;
+		if (!playerGrid[row][col].hit) {
+			playerGrid[row][col].hit = true;
+			let cell = document.querySelector(
+				`[data-row="${row}"][data-col="${col}"]`
+			);
+			displayController.updateCellHits(playerGrid, row, col, cell);
+			checkAttack(row, col, playerGrid, playerShips);
+			checkWin();
+			return { row, col };
+		} else {
+			return makeComputerAttack(playerGrid);
+		}
+	}
+
+	function getRandomCoordinates() {
 		const row = Math.floor(Math.random() * gridSize);
 		const col = Math.floor(Math.random() * gridSize);
 
 		return { row, col };
 	}
 
-	function checkAttack(row, col) {
+	function checkAttack(row, col, grid, ships) {
 		switch (grid[row][col].ship) {
 			case 'carrier':
-				carrier.hit();
+				ships[0].hit();
 				break;
 			case 'battleship':
-				battleship.hit();
+				ships[1].hit();
 				break;
 			case 'cruiser':
-				cruiser.hit();
+				ships[2].hit();
 				break;
 			case 'submarine':
-				submarine.hit();
+				ships[3].hit();
 				break;
 			case 'destroyer':
-				destroyer.hit();
+				ships[4].hit();
 				break;
 		}
-		checkWin();
 	}
 
 	function checkWin() {
-		if (ships.every((ship) => ship.isSunk)) {
-			allShipsDown = true;
+		if (playerShips.every((ship) => ship.isSunk)) {
+			console.log('Computer has won!');
+		} else if (computerShips.every((ship) => ship.isSunk)) {
+			console.log('You have won');
 		}
-		return allShipsDown;
 	}
 
-	const carrier = ship.createCarrier();
-	const battleship = ship.createBattleship();
-	const cruiser = ship.createCruiser();
-	const submarine = ship.createSubmarine();
-	const destroyer = ship.createDestroyer();
-	const randomAttack = makeRandomAttack();
-	createGrid();
-	console.log(randomAttack);
-	console.log(makeAttack(randomAttack.row, randomAttack.col));
-	console.log(grid);
+	function initiateGameWithRandomShips() {
+		createGrid(playerGrid);
+		createGrid(computerGrid);
+		shipsController.createRandomShips(computerGrid, computerShips);
+		displayController.initiateRenderGrid();
+	}
 
 	return {
 		createGrid,
-		placeShip,
 		makeAttack,
 		checkAttack,
 		checkWin,
-		getGrid,
+		getRandomCoordinates,
+		initiateGameWithRandomShips,
+		makeComputerAttack,
+		clearGrid,
 	};
 })();
