@@ -3,26 +3,27 @@
 	<head>
 		<meta charset="UTF-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link
+			rel="icon"
+			href="./images/crosshair-bold-svgrepo-com.svg"
+			type="image/x-icon"
+		/>
 		<title>Battleships</title>
 	<script defer src="bundle.js"></script></head>
 	<body>
 		<div class="main-container">
 			<div class="header">
 				<span id="header-logo">Battleships</span>
-
-				<button type="button" id="comp-attack-button">
+				<!-- <button type="button" id="comp-attack-button">
 					Comp attack
-				</button>
+				</button> -->
 			</div>
+			<span id="announcement"
+				>It's time to place your flot. You can choose random placement
+				or place ships vertically or horizontally</span
+			>
 			<div class="initiator">
-				<!-- <input
-					type="text"
-					name="player-name"
-					id="player-name"
-					placeholder="Enter your name"
-					autocomplete="off"
-				/> -->
-				<button type="button" id="get-name-button">PLAY</button>
+				<button type="button" id="play-button">PLAY</button>
 			</div>
 			<div class="game-handler">
 				<div class="ships-container">
@@ -47,31 +48,26 @@
 							|
 						</button>
 					</div>
-					<div draggable="true" class="ship-carrier draggable">
-						carrier
-					</div>
-					<div draggable="true" class="ship-battleship draggable">
-						battleship
-					</div>
-					<div draggable="true" class="ship-cruiser draggable">
-						cruiser
-					</div>
-					<div draggable="true" class="ship-submarine draggable">
-						submarine
-					</div>
-					<div draggable="true" class="ship-destroyer draggable">
-						destroyer
-					</div>
+					<div draggable="true" class="ship-carrier draggable"></div>
+					<div
+						draggable="true"
+						class="ship-battleship draggable"
+					></div>
+					<div draggable="true" class="ship-cruiser draggable"></div>
+					<div
+						draggable="true"
+						class="ship-submarine draggable"
+					></div>
+					<div
+						draggable="true"
+						class="ship-destroyer draggable"
+					></div>
 				</div>
 				<div class="player-grid-container">
-					<div class="player-grid">
-						<p>123</p>
-					</div>
+					<div class="player-grid"></div>
 				</div>
-				<div class="computer-grid-container">
-					<div class="computer-grid">
-						<p>321</p>
-					</div>
+				<div class="computer-grid-container" style="display: none">
+					<div class="computer-grid"></div>
 				</div>
 			</div>
 		</div>
