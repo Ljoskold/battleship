@@ -141,18 +141,33 @@ export const shipsController = (() => {
 			}
 		});
 	}
+	let radnomizeBtnClicked = false;
+
+	function getRandomizeStatus() {
+		return radnomizeBtnClicked;
+	}
+
 	const randomShipsBtn = document.querySelector('#random-ships-button');
 	randomShipsBtn.addEventListener('click', () => {
 		playerGrid.innerHTML = '';
 		gameController.createGrid(playerGrid);
 		createRandomShips(playerGrid, playerShips);
 		displayController.renderGrid(playerGrid, 'player-grid');
+		radnomizeBtnClicked = true;
 	});
 
 	let dragged = null;
 	let draggedElement = null;
+	let shipDragged = 0;
 
 	const draggables = document.querySelectorAll('.draggable');
+
+	function getDraggables() {
+		if (shipDragged < 5) {
+			return false;
+		}
+		return true;
+	}
 
 	draggables.forEach((draggable) => {
 		draggable.addEventListener('dragstart', (e) => {
@@ -254,23 +269,6 @@ export const shipsController = (() => {
 			cell.style.border = '';
 		}
 	});
-	// playerGridDiv.addEventListener('drag', (e) => {
-	// 	console.log('hi');
-	// 	const orientation = document.querySelector('.chosen').id;
-	// 	if (draggedElement) {
-	// 		const rect = playerGridDiv.getBoundingClientRect();
-	// 		let x = e.clientX - rect.left; // x position within the element.
-	// 		let y = e.clientY - rect.top; // y position within the element.
-	// 		draggedElement.style.left = `${x}px`;
-	// 		draggedElement.style.top = `${y}px`;
-
-	// 		if (orientation === 'vertical') {
-	// 			draggedElement.style.transform = 'rotate(90deg)';
-	// 		} else {
-	// 			draggedElement.style.transform = 'rotate(0deg)';
-	// 		}
-	// 	}
-	// });
 
 	playerGridDiv.addEventListener('drop', (e) => {
 		e.preventDefault();
@@ -286,6 +284,7 @@ export const shipsController = (() => {
 					playerGrid
 				)
 			) {
+				shipDragged++;
 				draggedElement.parentNode.removeChild(draggedElement);
 			}
 		}
@@ -302,5 +301,5 @@ export const shipsController = (() => {
 		});
 	});
 
-	return { createRandomShips };
+	return { createRandomShips, getDraggables, getRandomizeStatus };
 })();

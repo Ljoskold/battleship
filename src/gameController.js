@@ -8,6 +8,7 @@ import {
 	computerShips,
 	playerShips,
 } from './shipsController.js';
+import cannonFireAudio from './audio/cannon_attack.mp3';
 
 export let playerGrid = [];
 export let computerGrid = [];
@@ -15,8 +16,9 @@ export let computerGrid = [];
 export const gameController = (() => {
 	const gridSize = 10;
 
+	let mySound = new Audio(cannonFireAudio);
+
 	function createGrid(grid) {
-		// grid = [];
 		for (let i = 0; i < gridSize; i++) {
 			grid[i] = [];
 			for (let j = 0; j < gridSize; j++) {
@@ -34,6 +36,9 @@ export const gameController = (() => {
 		if (grid[row][col].hit === false) {
 			grid[row][col].hit = true;
 			checkAttack(row, col, computerGrid, computerShips);
+			mySound.play().catch((error) => {
+				console.error('Failed to play audio:', error);
+			});
 			checkWin();
 		} else {
 			throw new Error();
@@ -41,8 +46,6 @@ export const gameController = (() => {
 	}
 
 	function makeComputerAttack() {
-		console.log('Player ships');
-		console.log(playerShips);
 		const randomCoordinates = getRandomCoordinates();
 		const { row, col } = randomCoordinates;
 		if (!playerGrid[row][col].hit) {
@@ -52,6 +55,9 @@ export const gameController = (() => {
 			);
 			displayController.updateCellHits(playerGrid, row, col, cell);
 			checkAttack(row, col, playerGrid, playerShips);
+			mySound.play().catch((error) => {
+				console.error('Failed to play audio:', error);
+			});
 			checkWin();
 			return { row, col };
 		} else {
@@ -89,16 +95,24 @@ export const gameController = (() => {
 	function checkWin() {
 		if (playerShips.every((ship) => ship.isSunk)) {
 			console.log('Computer has won!');
+			return true;
 		} else if (computerShips.every((ship) => ship.isSunk)) {
 			console.log('You have won');
+			return true;
 		}
+		return false;
 	}
 
 	function initiateGameWithRandomShips() {
 		createGrid(playerGrid);
 		createGrid(computerGrid);
 		shipsController.createRandomShips(computerGrid, computerShips);
-		displayController.initiateRenderGrid();
+	}
+	function game() {
+		while (!checkWin()) {
+			makeAttack(row, col, computerGrid);
+			makeComputerAttack();
+		}
 	}
 
 	return {

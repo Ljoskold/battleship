@@ -1,3 +1,7 @@
+@font-face {
+	font-family: Military;
+	src: url(./fonts/FortunerHeavyPersonalUse.otf);
+}
 * {
 	box-sizing: border-box;
 }
@@ -5,6 +9,8 @@ body {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
+	background-image: url(./images/sea.jpg);
+	background-size: fill;
 }
 .main-container {
 	width: 30%;
@@ -14,14 +20,10 @@ body {
 	top: 50%;
 	left: 50%;
 	transform: translate(-50%, -50%);
-	/* display: flex;
-	flex-direction: column;
-	align-items: center; */
 	display: grid;
 	grid-template-rows: 20% 1fr;
-	/* gap: 100px; */
-	background-color: lightgrey;
-	transition: width 2s, height 2s;
+	background-color: rgba(211, 211, 211, 0.587);
+	transition: width 3s, height 3s;
 }
 /* //Big main container sizing */
 .active {
@@ -34,10 +36,8 @@ body {
 	transform: translate(-50%, -50%);
 	display: grid;
 	grid-template-rows: 15% 1fr;
-	/* flex-direction: column; */
 	align-items: start;
-	/* gap: 100px; */
-	background-color: lightgrey;
+	background-color: rgba(38, 68, 36, 0.618);
 }
 /* ////////// */
 .header {
@@ -47,10 +47,13 @@ body {
 	align-items: center;
 	justify-content: center;
 	border-radius: 20px 20px 0 0;
-	background-color: grey;
+	background: #44a08d;
+	background: -webkit-linear-gradient(to bottom, #093637, #44a07b);
+	background: linear-gradient(to bottom, #093637, #44a07b);
 }
 #header-logo {
 	font-size: 4rem;
+	font-family: Military;
 }
 .initiator {
 	display: flex;
@@ -58,45 +61,61 @@ body {
 	gap: 30px;
 	width: 100%;
 	align-items: center;
+	justify-content: center;
 }
-input[id='player-name'] {
-	height: 40px;
-	width: 50%;
-	font-size: 1.5rem;
+.ships-container {
+	display: grid;
+	grid-template-rows: repeat(6, 1fr);
+	align-items: center;
+	justify-content: center;
+	width: 300px;
+	height: 380px;
+	background-color: rgba(128, 128, 128, 0.603);
+	border-radius: 15px;
 }
-#get-name-button {
-	width: 100px;
-	font-size: 1.5rem;
-}
-
 .ship-carrier {
 	width: 210px;
 	height: 42px;
-	background-color: yellow;
+	background-color: rgba(255, 255, 0);
+	background-image: url(./images/carrier.png);
+	background-size: contain;
+	background-repeat: no-repeat;
 }
 .ship-battleship {
 	width: 168px;
 	height: 42px;
 	background-color: rgb(255, 128, 0);
+	background-image: url(./images/battleship.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: bottom;
 }
 .ship-cruiser {
 	width: 126px;
 	height: 42px;
 	background-color: rgb(166, 255, 0);
+	background-image: url(./images/cruiser.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: bottom;
 }
 .ship-submarine {
 	width: 126px;
 	height: 42px;
 	background-color: rgb(0, 255, 128);
+	background-image: url(./images/submarine.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: center;
 }
 .ship-destroyer {
 	width: 84px;
 	height: 42px;
 	background-color: rgb(0, 251, 255);
-}
-.orientation-buttons {
-	width: 30px;
-	height: 30px;
+	background-image: url(./images/destroyer.png);
+	background-size: contain;
+	background-repeat: no-repeat;
+	background-position: bottom;
 }
 .chosen {
 	background-color: greenyellow;
@@ -104,8 +123,46 @@ input[id='player-name'] {
 .draggable {
 	cursor: move;
 }
-.lol {
-	-webkit-transform: rotate(90deg);
-	transform: rotate(90deg);
-	background-color: #fff;
+.miss {
+	background-color: rgb(138, 171, 182);
+	background-image: url(./images/dot.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.hit {
+	background-image: url(./images/cross.svg);
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.glow {
+	animation: glow 1s infinite alternate;
+}
+
+@keyframes glow {
+	from {
+		box-shadow: 0 0 10px rgba(255, 255, 0, 0.5);
+	}
+	to {
+		box-shadow: 0 0 20px rgba(255, 255, 0, 1);
+	}
+}
+#play-button {
+	width: 250px;
+	height: 80px;
+	font-size: 1.5rem;
+	background-color: #44a07b;
+}
+#random-ships-button {
+	width: 80px;
+	height: 30px;
+}
+#reset-button {
+	width: 60px;
+	height: 30px;
+}
+.orientation-buttons {
+	width: 30px;
+	height: 30px;
+	border-radius: 50px;
+	border: none;
 }

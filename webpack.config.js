@@ -8,15 +8,34 @@ module.exports = {
 		filename: 'bundle.js',
 		path: path.resolve(__dirname, 'dist'),
 	},
+	watchOptions: {
+		ignored: /\.(mp3|ogg|wav)$/,
+	},
 	module: {
 		rules: [
+			{
+				test: /\.(ogg|mp3|wav)$/i,
+				use: [
+					{
+						loader: 'file-loader',
+						options: {
+							name: '[name].[ext]',
+							outputPath: 'audio/',
+							publicPath: 'audio/',
+						},
+					},
+				],
+			},
 			{
 				test: /\.css$/,
 				use: ['style-loader', 'css-loader'],
 			},
 			{
-				test: /\.(png|jpg|jpeg|gif)$/i,
+				test: /\.(png|jpg|jpeg|gif|svg)$/i,
 				type: 'asset/resource',
+				generator: {
+					filename: 'images/[name][ext]',
+				},
 			},
 		],
 	},
