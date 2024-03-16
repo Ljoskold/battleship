@@ -8,15 +8,14 @@ import {
 	computerShips,
 	playerShips,
 } from './shipsController.js';
-import cannonFireAudio from './audio/cannon_attack.mp3';
+import victory from './audio/victory.mp3';
+import defeat from './audio/defeat.mp3';
 
 export let playerGrid = [];
 export let computerGrid = [];
 
 export const gameController = (() => {
 	const gridSize = 10;
-
-	let mySound = new Audio(cannonFireAudio);
 
 	function createGrid(grid) {
 		for (let i = 0; i < gridSize; i++) {
@@ -31,38 +30,30 @@ export const gameController = (() => {
 	}
 
 	function makeAttack(row, col, grid) {
-		console.log('Computer ships');
-		console.log(computerShips);
-		if (grid[row][col].hit === false) {
-			grid[row][col].hit = true;
-			checkAttack(row, col, computerGrid, computerShips);
-			mySound.play().catch((error) => {
-				console.error('Failed to play audio:', error);
-			});
-			checkWin();
-		} else {
-			throw new Error();
+		if (grid[row][col].hit) {
+			return;
 		}
+
+		grid[row][col].hit = true;
+		checkAttack(row, col, computerGrid, computerShips);
 	}
 
 	function makeComputerAttack() {
-		const randomCoordinates = getRandomCoordinates();
-		const { row, col } = randomCoordinates;
-		if (!playerGrid[row][col].hit) {
-			playerGrid[row][col].hit = true;
-			let cell = document.querySelector(
-				`[data-row="${row}"][data-col="${col}"]`
-			);
-			displayController.updateCellHits(playerGrid, row, col, cell);
-			checkAttack(row, col, playerGrid, playerShips);
-			mySound.play().catch((error) => {
-				console.error('Failed to play audio:', error);
-			});
-			checkWin();
-			return { row, col };
-		} else {
-			return makeComputerAttack(playerGrid);
-		}
+		let row, col;
+		do {
+			const randomCoordinates = getRandomCoordinates();
+			row = randomCoordinates.row;
+			col = randomCoordinates.col;
+		} while (playerGrid[row][col].hit);
+
+		playerGrid[row][col].hit = true;
+		let cell = document.querySelector(
+			`[data-row="${row}"][data-col="${col}"]`
+		);
+		displayController.updateCellHits(playerGrid, row, col, cell);
+		checkAttack(row, col, playerGrid, playerShips);
+
+		return { row, col };
 	}
 
 	function getRandomCoordinates() {
@@ -92,12 +83,21 @@ export const gameController = (() => {
 		}
 	}
 
+	let victorySound = new Audio(victory);
+	let defeatSound = new Audio(defeat);
+
 	function checkWin() {
 		if (playerShips.every((ship) => ship.isSunk)) {
-			console.log('Computer has won!');
+			displayController.gameOver('You have lost :(');
+			defeatSound.play();
+			playerGridDiv.classList.remove('glow');
+			computerGridDiv.classList.remove('glow');
 			return true;
 		} else if (computerShips.every((ship) => ship.isSunk)) {
-			console.log('You have won');
+			displayController.gameOver('You have won :)');
+			victorySound.play();
+			computerGridDiv.classList.remove('glow');
+			playerGridDiv.classList.remove('glow');
 			return true;
 		}
 		return false;
@@ -108,11 +108,50 @@ export const gameController = (() => {
 		createGrid(computerGrid);
 		shipsController.createRandomShips(computerGrid, computerShips);
 	}
-	function game() {
-		while (!checkWin()) {
-			makeAttack(row, col, computerGrid);
+
+	async function gameStart() {
+		let gameOver = false;
+
+		while (!gameOver) {
+			setTimeout(() => {
+				computerGridDiv.classList.add('glow');
+			}, 900);
+
+			await waitForPlayerAttack();
+			if (checkWin()) {
+				gameOver = true;
+				break;
+			}
+			computerGridDiv.classList.remove('glow');
+
+			playerGridDiv.classList.add('glow');
+			await new Promise((resolve) => setTimeout(resolve, 1700));
 			makeComputerAttack();
+			if (checkWin()) {
+				gameOver = true;
+				break;
+			}
+			playerGridDiv.classList.remove('glow');
 		}
+	}
+	function waitForPlayerAttack() {
+		return new Promise((resolve) => {
+			computerGridDiv.addEventListener('click', function (event) {
+				const cell = event.target;
+				if (cell.classList.contains('cell')) {
+					const row = cell.dataset.row;
+					const col = cell.dataset.col;
+					gameController.makeAttack(row, col, computerGrid);
+					displayController.updateCellHits(
+						computerGrid,
+						row,
+						col,
+						cell
+					);
+					resolve();
+				}
+			});
+		});
 	}
 
 	return {
@@ -124,5 +163,6 @@ export const gameController = (() => {
 		initiateGameWithRandomShips,
 		makeComputerAttack,
 		clearGrid,
+		gameStart,
 	};
 })();

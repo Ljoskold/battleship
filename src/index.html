@@ -14,39 +14,36 @@
 		<div class="main-container">
 			<div class="header">
 				<span id="header-logo">Battleships</span>
-				<!-- <button type="button" id="comp-attack-button">
-					Comp attack
-				</button> -->
 			</div>
-			<span id="announcement"
-				>It's time to place your flot. You can choose random placement
-				or place ships vertically or horizontally</span
-			>
 			<div class="initiator">
 				<button type="button" id="play-button">PLAY</button>
 			</div>
 			<div class="game-handler">
 				<div class="ships-container">
 					<div class="configuration">
-						<button type="button" id="random-ships-button">
-							Randomize
-						</button>
-						<button id="reset-button">reset</button>
-						<label for="orientation">Place:</label>
-						<button
-							class="orientation-buttons chosen"
-							id="horizontal"
-							value="horizontal"
-						>
-							&mdash;
-						</button>
-						<button
-							class="orientation-buttons"
-							id="vertical"
-							value="vertical"
-						>
-							|
-						</button>
+						<div class="configuration-buttons">
+							<button type="button" id="random-ships-button">
+								randomize
+							</button>
+							<button id="reset-button">reset</button>
+						</div>
+						<div class="configuration-orientation">
+							<label for="orientation" id="lable">Place:</label>
+							<button
+								class="orientation-buttons chosen"
+								id="horizontal"
+								value="horizontal"
+							>
+								&mdash;
+							</button>
+							<button
+								class="orientation-buttons"
+								id="vertical"
+								value="vertical"
+							>
+								|
+							</button>
+						</div>
 					</div>
 					<div draggable="true" class="ship-carrier draggable"></div>
 					<div
@@ -68,6 +65,12 @@
 				</div>
 				<div class="computer-grid-container" style="display: none">
 					<div class="computer-grid"></div>
+				</div>
+				<div class="pop-up">
+					<p id="pop-up-text">Game Over</p>
+					<button type="button" id="play-again-button">
+						PLAY AGAIN
+					</button>
 				</div>
 			</div>
 		</div>

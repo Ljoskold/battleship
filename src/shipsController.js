@@ -4,13 +4,15 @@ import {
 	displayController,
 } from './displayController';
 import { playerGrid, computerGrid, gameController } from './gameController';
+import configClick from './audio/configClick.mp3';
 
 export class Ship {
-	constructor(name, length, hp) {
+	constructor(name, length, hp, cells) {
 		this.name = name;
 		this.length = length;
 		this.hp = hp;
 		this.isSunk = false;
+		this.cells = cells;
 	}
 
 	hit() {
@@ -85,6 +87,17 @@ export const shipsController = (() => {
 		}
 	}
 
+	function resetShips(ships) {
+		ships.length = 0;
+		ships.push(
+			Ship.createCarrier(),
+			Ship.createBattleship(),
+			Ship.createCruiser(),
+			Ship.createSubmarine(),
+			Ship.createDestroyer()
+		);
+	}
+
 	function canPlaceShip(ship, row, col, orientation, grid) {
 		const gridSize = grid.length;
 		const shipSize = ship.length;
@@ -141,19 +154,34 @@ export const shipsController = (() => {
 			}
 		});
 	}
+
 	let radnomizeBtnClicked = false;
+	let randomizeBtnSound = new Audio(configClick);
+
+	function resetRandomize() {
+		radnomizeBtnClicked = false;
+	}
 
 	function getRandomizeStatus() {
 		return radnomizeBtnClicked;
 	}
 
 	const randomShipsBtn = document.querySelector('#random-ships-button');
+
 	randomShipsBtn.addEventListener('click', () => {
+		const shipsContainer = document.querySelector('.ships-container');
+
 		playerGrid.innerHTML = '';
 		gameController.createGrid(playerGrid);
 		createRandomShips(playerGrid, playerShips);
 		displayController.renderGrid(playerGrid, 'player-grid');
 		radnomizeBtnClicked = true;
+		Array.from(shipsContainer.querySelectorAll('.draggable')).forEach(
+			(el) => {
+				el.style.opacity = '0';
+			}
+		);
+		randomizeBtnSound.play();
 	});
 
 	let dragged = null;
@@ -163,10 +191,10 @@ export const shipsController = (() => {
 	const draggables = document.querySelectorAll('.draggable');
 
 	function getDraggables() {
-		if (shipDragged < 5) {
-			return false;
-		}
-		return true;
+		return shipDragged;
+	}
+	function resetDraggables() {
+		shipDragged = 0;
 	}
 
 	draggables.forEach((draggable) => {
@@ -285,7 +313,7 @@ export const shipsController = (() => {
 				)
 			) {
 				shipDragged++;
-				draggedElement.parentNode.removeChild(draggedElement);
+				draggedElement.style.opacity = '0';
 			}
 		}
 
@@ -298,8 +326,16 @@ export const shipsController = (() => {
 		button.addEventListener('click', () => {
 			orientationBtns.forEach((btn) => btn.classList.remove('chosen'));
 			button.classList.add('chosen');
+			randomizeBtnSound.play();
 		});
 	});
 
-	return { createRandomShips, getDraggables, getRandomizeStatus };
+	return {
+		createRandomShips,
+		getDraggables,
+		getRandomizeStatus,
+		resetDraggables,
+		resetRandomize,
+		resetShips,
+	};
 })();

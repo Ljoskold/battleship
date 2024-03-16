@@ -2,6 +2,10 @@
 	font-family: Military;
 	src: url(./fonts/FortunerHeavyPersonalUse.otf);
 }
+@font-face {
+	font-family: Squarea;
+	src: url(./fonts/Squarea\ Regular.ttf);
+}
 * {
 	box-sizing: border-box;
 }
@@ -9,11 +13,16 @@ body {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
-	background-image: url(./images/sea.jpg);
+	background-image: url(./images/Background.jpg);
 	background-size: fill;
 }
+body button {
+	font-family: Squarea;
+	cursor: pointer;
+}
 .main-container {
-	width: 30%;
+	font-family: Squarea;
+	width: 50%;
 	height: 60%;
 	border-radius: 20px;
 	position: absolute;
@@ -21,9 +30,11 @@ body {
 	left: 50%;
 	transform: translate(-50%, -50%);
 	display: grid;
-	grid-template-rows: 20% 1fr;
-	background-color: rgba(211, 211, 211, 0.587);
+	grid-template-rows: 15% 1fr;
 	transition: width 3s, height 3s;
+	background-image: url(./images/MainPanel01.png);
+	background-size: cover;
+	background-repeat: no-repeat;
 }
 /* //Big main container sizing */
 .active {
@@ -37,23 +48,22 @@ body {
 	display: grid;
 	grid-template-rows: 15% 1fr;
 	align-items: start;
-	background-color: rgba(38, 68, 36, 0.618);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
 }
 /* ////////// */
 .header {
 	width: 100%;
 	height: 100%;
 	display: flex;
-	align-items: center;
+	align-items: flex-end;
 	justify-content: center;
 	border-radius: 20px 20px 0 0;
-	background: #44a08d;
-	background: -webkit-linear-gradient(to bottom, #093637, #44a07b);
-	background: linear-gradient(to bottom, #093637, #44a07b);
 }
 #header-logo {
 	font-size: 4rem;
 	font-family: Military;
+	color: white;
 }
 .initiator {
 	display: flex;
@@ -65,18 +75,35 @@ body {
 }
 .ships-container {
 	display: grid;
-	grid-template-rows: repeat(6, 1fr);
+	grid-template-rows: 25% repeat(5, 1fr);
 	align-items: center;
 	justify-content: center;
 	width: 300px;
-	height: 380px;
-	background-color: rgba(128, 128, 128, 0.603);
+	height: 480px;
 	border-radius: 15px;
+	background-image: url(./images/Card\ X2.png);
+	background-size: 100% 100%;
+	background-repeat: no-repeat;
+	background-position: center;
+}
+.configuration {
+	display: flex;
+	gap: 10px;
+	flex-direction: column;
+	align-self: end;
+}
+.configuration-buttons {
+	display: flex;
+	gap: 10px;
+}
+.configuration-orientation {
+	display: flex;
+	align-items: center;
+	gap: 10px;
 }
 .ship-carrier {
 	width: 210px;
 	height: 42px;
-	background-color: rgba(255, 255, 0);
 	background-image: url(./images/carrier.png);
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -84,7 +111,6 @@ body {
 .ship-battleship {
 	width: 168px;
 	height: 42px;
-	background-color: rgb(255, 128, 0);
 	background-image: url(./images/battleship.png);
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -93,7 +119,6 @@ body {
 .ship-cruiser {
 	width: 126px;
 	height: 42px;
-	background-color: rgb(166, 255, 0);
 	background-image: url(./images/cruiser.png);
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -102,7 +127,6 @@ body {
 .ship-submarine {
 	width: 126px;
 	height: 42px;
-	background-color: rgb(0, 255, 128);
 	background-image: url(./images/submarine.png);
 	background-size: contain;
 	background-repeat: no-repeat;
@@ -111,28 +135,37 @@ body {
 .ship-destroyer {
 	width: 84px;
 	height: 42px;
-	background-color: rgb(0, 251, 255);
 	background-image: url(./images/destroyer.png);
 	background-size: contain;
 	background-repeat: no-repeat;
-	background-position: bottom;
+	background-position: top;
 }
 .chosen {
-	background-color: greenyellow;
+	color: #ffd83a;
 }
 .draggable {
 	cursor: move;
 }
-.miss {
-	background-color: rgb(138, 171, 182);
+.miss::after {
+	content: '';
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	background-image: url(./images/dot.svg);
-	background-repeat: no-repeat;
+	background-size: cover;
 	background-position: center;
 }
-.hit {
+.hit::after {
+	content: '';
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
 	background-image: url(./images/cross.svg);
-	background-repeat: no-repeat;
+	background-size: cover;
 	background-position: center;
+	border: 1px solid red;
 }
 .glow {
 	animation: glow 1s infinite alternate;
@@ -149,20 +182,52 @@ body {
 #play-button {
 	width: 250px;
 	height: 80px;
-	font-size: 1.5rem;
-	background-color: #44a07b;
+	font-size: 2rem;
+	background-color: #00b2a6;
+	border: none;
+	border-radius: 10px;
+	transition: background-color 0.3s ease-in-out;
+}
+#play-button:hover {
+	background-color: #00fba4;
+}
+#play-button:active {
+	background-image: linear-gradient(to bottom, white, white);
+	box-shadow: 0px 0px 30px #00fba4;
 }
 #random-ships-button {
+	font-size: 0.85rem;
 	width: 80px;
-	height: 30px;
+	height: 40px;
+	border-radius: 10px;
+	background-image: url(./images/button_Hover.png);
+	background-position: center;
+	color: #ffd83a;
+	border: 0.1px solid #00ffd8;
+}
+#random-ships-button:active {
+	border: 1px solid black;
 }
 #reset-button {
-	width: 60px;
-	height: 30px;
+	font-size: 0.85rem;
+	width: 80px;
+	height: 40px;
+	color: #ffd83a;
+	border: 0.1px solid #00ffd8;
+	background-image: url(./images/button_Hover.png);
+	background-position: center;
+	border-radius: 10px;
+}
+#reset-button:active {
+	border: 1px solid black;
 }
 .orientation-buttons {
 	width: 30px;
 	height: 30px;
 	border-radius: 50px;
-	border: none;
+	border: 0.1px solid #00ffd8;
+	background-image: url(./images/button_Hover.png);
+}
+#lable {
+	color: white;
 }

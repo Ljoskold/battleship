@@ -7,6 +7,14 @@
 	opacity: 0;
 }
 #announcement {
+	color: white;
+	font-size: 1.5rem;
+	animation: typing 4s;
+}
+.announcement-wrapper {
+	overflow: hidden;
+	align-items: center;
+	display: flex;
 	opacity: 0;
 	height: 50px;
 	width: 70%;
@@ -15,10 +23,22 @@
 	font-size: 1.5rem;
 	top: 20%;
 	left: 18%;
-	border: 2px solid black;
-	border-radius: 10px;
+	border: 2px solid #65d297;
 	z-index: 2;
-	/* transition: opacity ease-in-out; */
+	background-color: rgba(97 118 133 / 60%);
+}
+.announcement-wrapper p {
+	display: inline-block;
+	white-space: nowrap;
+	overflow: hidden;
+}
+@keyframes typing {
+	from {
+		width: 0;
+	}
+	to {
+		width: 100%;
+	}
 }
 .player-grid-container,
 .computer-grid-container {
@@ -50,36 +70,73 @@
 	display: grid;
 	grid-template-columns: repeat(10, 1fr);
 	grid-template-rows: repeat(10, 1fr);
-	/* opacity: 0; */
 }
 
 .cell {
-	border: 0.5px solid black;
-	background-color: rgb(100, 179, 249);
+	border: 0.5px solid #757575;
 	font-size: 1.5rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	/* cursor: url(./images/crosshair-bold-svgrepo-com.svg) 20 20, auto; */
+	background-image: url(./images/water.jpg);
+	background-size: cover;
 }
 .cell:hover {
 	border: 1px solid red;
 }
 .cell.carrier {
-	background-color: yellow;
+	background-image: url('./images/m-006.jpg');
+	background-size: cover;
 }
 .cell.battleship {
-	background-color: rgb(255, 128, 0);
+	background-image: url('./images/m-006.jpg');
+	background-size: cover;
 }
 .cell.cruiser {
-	background-color: rgb(166, 255, 0);
+	background-image: url('./images/m-006.jpg');
+	background-size: cover;
 }
 .cell.submarine {
-	background-color: rgb(0, 255, 128);
+	background-image: url('./images/m-006.jpg');
+	background-size: cover;
 }
 .cell.destroyer {
-	background-color: rgb(0, 251, 255);
+	background-image: url('./images/m-006.jpg');
+	background-size: cover;
 }
 .selected-ship {
 	background-color: lightgrey;
+}
+.pop-up {
+	display: none;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+	position: absolute;
+	width: 40%;
+	height: 40%;
+	background: #44a07b;
+	border-radius: 10px;
+	background-image: url(./images/MainPanel03.png);
+	background-repeat: no-repeat;
+	background-size: cover;
+	box-shadow: 0 0 30px rgb(0, 190, 165);
+}
+#pop-up-text {
+	color: white;
+	font-size: 4rem;
+}
+#play-again-button {
+	font-size: 1.5rem;
+	background-color: #00b2a6;
+	border: none;
+	border-radius: 10px;
+	transition: background-color 0.3s ease-in-out;
+}
+#play-again-button:hover {
+	background-color: #00fba4;
+}
+#play-again-button:active {
+	background-image: linear-gradient(to bottom, white, white);
+	box-shadow: 0px 0px 30px #00fba4;
 }
