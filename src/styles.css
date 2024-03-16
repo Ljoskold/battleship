@@ -13,8 +13,7 @@ body {
 	width: 100%;
 	height: 100%;
 	box-sizing: border-box;
-	background-image: url(./images/Background.jpg);
-	background-size: fill;
+	background-image: url(./images/background-brgh.jpg);
 }
 body button {
 	font-family: Squarea;
@@ -165,10 +164,23 @@ body button {
 	background-image: url(./images/cross.svg);
 	background-size: cover;
 	background-position: center;
-	border: 1px solid red;
 }
 .glow {
 	animation: glow 1s infinite alternate;
+}
+.cell.destroyed::after {
+	content: '';
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-image: url(./images/explosion-boom.gif);
+	background-size: cover;
+	background-position: center;
+}
+.cell.sunken {
+	background-image: url(./images/ship-sunken.png);
+	background-size: cover;
 }
 
 @keyframes glow {
@@ -220,6 +232,41 @@ body button {
 }
 #reset-button:active {
 	border: 1px solid black;
+}
+button:disabled {
+	filter: grayscale(0.7);
+}
+.sound-button {
+	position: relative;
+	width: 35px;
+	height: 35px;
+	border-radius: 50px;
+	border: 0.1px solid #00ffd8;
+	background-image: url(./images/button_Hover.png);
+	background-position: center;
+	cursor: pointer;
+}
+.sound-button::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 20px;
+	height: 20px;
+	background-image: url(./images/sound-on.svg);
+	background-size: contain;
+}
+.sound-button.off::after {
+	content: '';
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	width: 20px;
+	height: 20px;
+	background-image: url(./images/sound-off.svg);
+	background-size: contain;
 }
 .orientation-buttons {
 	width: 30px;

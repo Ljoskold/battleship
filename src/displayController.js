@@ -1,9 +1,6 @@
 import { gameController, playerGrid, computerGrid } from './gameController';
 import { computerShips, playerShips, shipsController } from './shipsController';
-import cannonHit from './audio/cannon_hit.mp3';
-import cannonFireAudio from './audio/cannon_attack.mp3';
-import startClick from './audio/startClick.mp3';
-import configClick from './audio/configClick.mp3';
+import { audioObjects } from './soundsController';
 
 export const playerGridDiv = document.querySelector('.player-grid');
 export const computerGridDiv = document.querySelector('.computer-grid');
@@ -14,8 +11,9 @@ export const displayController = (() => {
 	const initiatorContainer = document.querySelector('.initiator');
 	const gameHandler = document.querySelector('.game-handler');
 	const resetBtn = document.querySelector('#reset-button');
+	const randomizeBtn = document.querySelector('#random-ships-button');
+	const orientationBtns = document.querySelectorAll('.orientation-buttons');
 	const shipsContainer = document.querySelector('.ships-container');
-	const compAttackBtn = document.querySelector('#comp-attack-button');
 	const computerGridContainter = document.querySelector(
 		'.computer-grid-container'
 	);
@@ -23,16 +21,12 @@ export const displayController = (() => {
 	const popUpText = document.querySelector('#pop-up-text');
 	const playAgainBtn = document.querySelector('#play-again-button');
 
-	let shipIsHit = new Audio(cannonHit);
-	let shoot = new Audio(cannonFireAudio);
-	let startButton = new Audio(startClick);
-	let menuClick = new Audio(configClick);
-
 	startGameBtn.addEventListener('click', () => {
 		initiatorContainer.style.display = 'none';
 		initGameStart();
-		startButton.play();
+		audioObjects[4].play();
 	});
+
 	resetBtn.addEventListener('click', () => {
 		gameController.clearGrid(playerGrid);
 		playerGridDiv.innerHTML = '';
@@ -44,7 +38,7 @@ export const displayController = (() => {
 			}
 		);
 		shipsController.resetDraggables();
-		menuClick.play();
+		audioObjects[2].play();
 	});
 
 	function setAnnounce(message) {
@@ -72,6 +66,11 @@ export const displayController = (() => {
 		shipsController.resetShips(computerShips);
 
 		playAgainBtn.addEventListener('click', () => {
+			resetBtn.disabled = false;
+			randomizeBtn.disabled = false;
+			orientationBtns.forEach((button) => {
+				button.disabled = false;
+			});
 			popUp.style.display = 'none';
 			shipsContainer.style.display = 'grid';
 			playerGridDiv.style.display = 'grid';
@@ -80,7 +79,7 @@ export const displayController = (() => {
 			computerGridContainter.style.display = 'none';
 			reset();
 			announceWrapper.style.opacity = '1';
-			startButton.play();
+			audioObjects[4].play();
 		});
 	}
 	function tutorialStart() {
@@ -99,10 +98,15 @@ export const displayController = (() => {
 			announceWrapper.appendChild(announce);
 
 			setTimeout(() => {
-				setAnnounce(
-					`It's time to place your flot. You can choose random
-				placement or place ships vertically or horizontally!`
-				);
+				setTimeout(() => {
+					setAnnounce(`It's time to place your flot.`);
+				}, 1000);
+				setTimeout(() => {
+					setAnnounce(
+						`You can choose random
+				placement or drag-and-drop ships vertically or horizontally!`
+					);
+				}, 4000);
 			}, 3000);
 		}, 2000);
 
@@ -114,7 +118,7 @@ export const displayController = (() => {
 					gameHandler.style.opacity = '1';
 				}, 100);
 			}, 0);
-		}, 10000);
+		}, 13000);
 	}
 
 	async function initGameStart() {
@@ -139,12 +143,13 @@ export const displayController = (() => {
 						setAnnounce(
 							'Click on the right grid cells to make an attack on enemy waters'
 						);
-					}, 1000); // Delay setting the announce message after rendering computerGrid
+					}, 500);
 				}, 100);
 			}, 0);
 		}, 1500);
-
-		gameController.gameStart();
+		setTimeout(() => {
+			gameController.gameStart();
+		}, 2000);
 	}
 
 	async function finishFlot() {
@@ -155,7 +160,11 @@ export const displayController = (() => {
 				if (draggable < 5 && randomize === false) {
 					setTimeout(checkConditions, 2000);
 				} else {
-					console.log('flot is done');
+					resetBtn.disabled = true;
+					randomizeBtn.disabled = true;
+					orientationBtns.forEach((button) => {
+						button.disabled = true;
+					});
 					resolve();
 				}
 			};
@@ -182,10 +191,13 @@ export const displayController = (() => {
 			}
 		);
 
-		setAnnounce(
-			`It's time to place your flot. You can choose random
-		placement or place ships vertically or horizontally!`
-		);
+		setAnnounce(`It's time to place your flot.`);
+		setTimeout(() => {
+			setAnnounce(
+				`You can choose random
+			placement or drag-and-drop ships vertically or horizontally!`
+			);
+		}, 2000);
 
 		shipsContainer.classList.add('glow');
 
@@ -214,21 +226,19 @@ export const displayController = (() => {
 
 	function updateCellHits(grid, x, y, target) {
 		if (grid[x][y].ship !== null) {
-			target.style.backgroundColor = 'rgb(138, 171, 182)';
+			audioObjects[1].play();
 			target.classList.add('hit');
 			target.dataset.hit = 'true';
-			shipIsHit.play();
 			target.style.pointerEvents = 'none';
 		} else {
+			audioObjects[0].play();
 			target.classList.add('miss');
 			target.dataset.hit = 'true';
-			shoot.play();
 			target.style.pointerEvents = 'none';
 		}
 	}
 
 	function renderGrid(grid, gridClass) {
-		let total = 0;
 		const gridElement = document.querySelector('.' + gridClass);
 		gridElement.innerHTML = '';
 		grid.forEach((row, rowIndex) => {
@@ -258,7 +268,7 @@ export const displayController = (() => {
 					newCell.setAttribute('data-ship', col.ship);
 				} else {
 					gridElement.style.cursor =
-						'url(./images/crosshair-bold-svgrepo-com.svg) 20 20, auto';
+						'url(./images/crosshair2.svg) 20 20, auto';
 				}
 
 				if (col.hit) {
@@ -268,10 +278,8 @@ export const displayController = (() => {
 				newCell.setAttribute('data-col', colIndex);
 				newCell.setAttribute('data-hit', col.hit);
 				gridElement.appendChild(newCell);
-				total++;
 			});
 		});
-		// console.log(total);
 	}
 
 	function initiateRenderGrid() {
@@ -282,9 +290,8 @@ export const displayController = (() => {
 	return {
 		renderGrid,
 		initiateRenderGrid,
-		// renderPlayer2Attack,
 		updateCellHits,
-		// computerGrid,
+		setAnnounce,
 		gameOver,
 	};
 })();

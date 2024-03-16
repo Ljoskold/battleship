@@ -9,4 +9,3 @@ import { gameController } from './gameController';
 
 gameController.initiateGameWithRandomShips();
 displayController.initiateRenderGrid();
-// gameController.game();

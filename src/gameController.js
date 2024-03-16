@@ -8,8 +8,7 @@ import {
 	computerShips,
 	playerShips,
 } from './shipsController.js';
-import victory from './audio/victory.mp3';
-import defeat from './audio/defeat.mp3';
+import { audioObjects } from './soundsController';
 
 export let playerGrid = [];
 export let computerGrid = [];
@@ -35,7 +34,14 @@ export const gameController = (() => {
 		}
 
 		grid[row][col].hit = true;
-		checkAttack(row, col, computerGrid, computerShips);
+		checkAttack(
+			row,
+			col,
+			computerGrid,
+			computerShips,
+			computerStatuses,
+			'.computer-grid'
+		);
 	}
 
 	function makeComputerAttack() {
@@ -51,7 +57,14 @@ export const gameController = (() => {
 			`[data-row="${row}"][data-col="${col}"]`
 		);
 		displayController.updateCellHits(playerGrid, row, col, cell);
-		checkAttack(row, col, playerGrid, playerShips);
+		checkAttack(
+			row,
+			col,
+			playerGrid,
+			playerShips,
+			playerStatuses,
+			'.player-grid'
+		);
 
 		return { row, col };
 	}
@@ -63,41 +76,159 @@ export const gameController = (() => {
 		return { row, col };
 	}
 
-	function checkAttack(row, col, grid, ships) {
+	const computerStatuses = [[], [], [], [], []];
+	const playerStatuses = [[], [], [], [], []];
+
+	function checkAttack(row, col, grid, ships, statuses, gridDiv) {
 		switch (grid[row][col].ship) {
 			case 'carrier':
 				ships[0].hit();
+				statuses[0].push([row, col]);
+				if (ships[0].isSunk) {
+					statuses[0].forEach((pair) => {
+						let cell = document.querySelector(
+							`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+						);
+						cell.classList.remove('carrier');
+						cell.classList.remove('hit');
+						cell.classList.add('destroyed');
+						setTimeout(() => {
+							statuses[0].forEach((pair) => {
+								let cell = document.querySelector(
+									`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+								);
+								cell.classList.remove('carrier');
+								cell.classList.remove('hit');
+								cell.classList.remove('destroyed');
+								cell.classList.add('sunken');
+							});
+						}, 1000);
+					});
+				}
 				break;
+
 			case 'battleship':
 				ships[1].hit();
+				statuses[1].push([row, col]);
+				if (ships[1].isSunk) {
+					statuses[1].forEach((pair) => {
+						let cell = document.querySelector(
+							`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+						);
+						cell.classList.remove('battleship');
+						cell.classList.remove('hit');
+						cell.classList.add('destroyed');
+					});
+					setTimeout(() => {
+						statuses[1].forEach((pair) => {
+							let cell = document.querySelector(
+								`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+							);
+							cell.classList.remove('battleship');
+							cell.classList.remove('hit');
+							cell.classList.remove('destroyed');
+							cell.classList.add('sunken');
+						});
+					}, 1000);
+				}
 				break;
+
 			case 'cruiser':
 				ships[2].hit();
+				statuses[2].push([row, col]);
+				if (ships[2].isSunk) {
+					statuses[2].forEach((pair) => {
+						let cell = document.querySelector(
+							`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+						);
+						cell.classList.remove('cruiser');
+						cell.classList.remove('hit');
+						cell.classList.add('destroyed');
+					});
+					setTimeout(() => {
+						statuses[2].forEach((pair) => {
+							let cell = document.querySelector(
+								`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+							);
+							cell.classList.remove('cruiser');
+							cell.classList.remove('hit');
+							cell.classList.remove('destroyed');
+							cell.classList.add('sunken');
+						});
+					}, 1000);
+				}
 				break;
+
 			case 'submarine':
 				ships[3].hit();
+				statuses[3].push([row, col]);
+				if (ships[3].isSunk) {
+					statuses[3].forEach((pair) => {
+						let cell = document.querySelector(
+							`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+						);
+						cell.classList.remove('submarine');
+						cell.classList.remove('hit');
+						cell.classList.add('destroyed');
+					});
+					setTimeout(() => {
+						statuses[3].forEach((pair) => {
+							let cell = document.querySelector(
+								`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+							);
+							cell.classList.remove('submarine');
+							cell.classList.remove('hit');
+							cell.classList.remove('destroyed');
+							cell.classList.add('sunken');
+						});
+					}, 1000);
+				}
 				break;
+
 			case 'destroyer':
 				ships[4].hit();
+				statuses[4].push([row, col]);
+				if (ships[4].isSunk) {
+					statuses[4].forEach((pair) => {
+						let cell = document.querySelector(
+							`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+						);
+						cell.classList.remove('destroyer');
+						cell.classList.remove('hit');
+						cell.classList.add('destroyed');
+					});
+					setTimeout(() => {
+						statuses[4].forEach((pair) => {
+							let cell = document.querySelector(
+								`${gridDiv} [data-row="${pair[0]}"][data-col="${pair[1]}"]`
+							);
+							cell.classList.remove('destroyer');
+							cell.classList.remove('hit');
+							cell.classList.remove('destroyed');
+							cell.classList.add('sunken');
+						});
+					}, 1000);
+				}
 				break;
 		}
 	}
 
-	let victorySound = new Audio(victory);
-	let defeatSound = new Audio(defeat);
-
 	function checkWin() {
 		if (playerShips.every((ship) => ship.isSunk)) {
-			displayController.gameOver('You have lost :(');
-			defeatSound.play();
-			playerGridDiv.classList.remove('glow');
-			computerGridDiv.classList.remove('glow');
+			setTimeout(() => {
+				displayController.gameOver('You have lost :(');
+				audioObjects[3].play();
+				playerGridDiv.classList.remove('glow');
+				computerGridDiv.classList.remove('glow');
+			}, 1500);
 			return true;
 		} else if (computerShips.every((ship) => ship.isSunk)) {
-			displayController.gameOver('You have won :)');
-			victorySound.play();
-			computerGridDiv.classList.remove('glow');
-			playerGridDiv.classList.remove('glow');
+			setTimeout(() => {
+				displayController.gameOver('You have won :)');
+				audioObjects[5].play();
+				computerGridDiv.classList.remove('glow');
+				playerGridDiv.classList.remove('glow');
+			}, 1500);
 			return true;
 		}
 		return false;
@@ -115,7 +246,11 @@ export const gameController = (() => {
 		while (!gameOver) {
 			setTimeout(() => {
 				computerGridDiv.classList.add('glow');
-			}, 900);
+
+				setTimeout(() => {
+					computerGridDiv.style.pointerEvents = 'auto';
+				}, 200);
+			}, 1350);
 
 			await waitForPlayerAttack();
 			if (checkWin()) {
@@ -123,15 +258,24 @@ export const gameController = (() => {
 				break;
 			}
 			computerGridDiv.classList.remove('glow');
+			computerGridDiv.style.pointerEvents = 'none';
 
-			playerGridDiv.classList.add('glow');
+			displayController.setAnnounce('Recieving attack, get ready!');
+			setTimeout(() => {
+				playerGridDiv.classList.add('glow');
+			}, 1350);
+
 			await new Promise((resolve) => setTimeout(resolve, 1700));
+
 			makeComputerAttack();
 			if (checkWin()) {
 				gameOver = true;
 				break;
 			}
 			playerGridDiv.classList.remove('glow');
+			setTimeout(() => {
+				displayController.setAnnounce('Attack!');
+			}, 1350);
 		}
 	}
 	function waitForPlayerAttack() {

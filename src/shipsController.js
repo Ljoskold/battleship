@@ -1,10 +1,6 @@
-import {
-	playerGridDiv,
-	computerGridDiv,
-	displayController,
-} from './displayController';
-import { playerGrid, computerGrid, gameController } from './gameController';
-import configClick from './audio/configClick.mp3';
+import { displayController } from './displayController';
+import { playerGrid, gameController } from './gameController';
+import { audioObjects } from './soundsController';
 
 export class Ship {
 	constructor(name, length, hp, cells) {
@@ -12,7 +8,6 @@ export class Ship {
 		this.length = length;
 		this.hp = hp;
 		this.isSunk = false;
-		this.cells = cells;
 	}
 
 	hit() {
@@ -156,7 +151,6 @@ export const shipsController = (() => {
 	}
 
 	let radnomizeBtnClicked = false;
-	let randomizeBtnSound = new Audio(configClick);
 
 	function resetRandomize() {
 		radnomizeBtnClicked = false;
@@ -181,7 +175,7 @@ export const shipsController = (() => {
 				el.style.opacity = '0';
 			}
 		);
-		randomizeBtnSound.play();
+		audioObjects[2].play();
 	});
 
 	let dragged = null;
@@ -254,7 +248,7 @@ export const shipsController = (() => {
 							`[data-row="${row + i}"][data-col="${col}"]`
 						);
 						if (nextCell) {
-							nextCell.style.border = '2px solid green';
+							nextCell.style.border = '2px solid greenyellow';
 						}
 					}
 				} else {
@@ -263,7 +257,7 @@ export const shipsController = (() => {
 							`[data-row="${row}"][data-col="${col + i}"]`
 						);
 						if (nextCell) {
-							nextCell.style.border = '2px solid green';
+							nextCell.style.border = '2px solid greenyellow';
 						}
 					}
 				}
@@ -326,7 +320,7 @@ export const shipsController = (() => {
 		button.addEventListener('click', () => {
 			orientationBtns.forEach((btn) => btn.classList.remove('chosen'));
 			button.classList.add('chosen');
-			randomizeBtnSound.play();
+			audioObjects[2].play();
 		});
 	});
 

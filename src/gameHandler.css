@@ -20,17 +20,19 @@
 	width: 70%;
 	position: absolute;
 	color: white;
-	font-size: 1.5rem;
+	font-size: 1.33rem;
 	top: 20%;
 	left: 18%;
-	border: 2px solid #65d297;
+	border: 15px solid;
+	border-image: url(./images/announce-border.png);
+	border-image-slice: 23 8 25 8 fill;
 	z-index: 2;
-	background-color: rgba(97 118 133 / 60%);
 }
 .announcement-wrapper p {
 	display: inline-block;
 	white-space: nowrap;
 	overflow: hidden;
+	padding-left: 10px;
 }
 @keyframes typing {
 	from {
@@ -80,28 +82,29 @@
 	align-items: center;
 	background-image: url(./images/water.jpg);
 	background-size: cover;
+	cursor: url(./images/crosshair2.svg);
 }
 .cell:hover {
 	border: 1px solid red;
 }
 .cell.carrier {
-	background-image: url('./images/m-006.jpg');
+	background-image: url('./images/ship.png');
 	background-size: cover;
 }
 .cell.battleship {
-	background-image: url('./images/m-006.jpg');
+	background-image: url('./images/ship.png');
 	background-size: cover;
 }
 .cell.cruiser {
-	background-image: url('./images/m-006.jpg');
+	background-image: url('./images/ship.png');
 	background-size: cover;
 }
 .cell.submarine {
-	background-image: url('./images/m-006.jpg');
+	background-image: url('./images/ship.png');
 	background-size: cover;
 }
 .cell.destroyer {
-	background-image: url('./images/m-006.jpg');
+	background-image: url('./images/ship.png');
 	background-size: cover;
 }
 .selected-ship {
